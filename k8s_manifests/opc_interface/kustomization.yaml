@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+configMapGenerator:
+- envs:
+  - opc_interface.env
+  name: opc_interface
+  options:
+    labels:
+      app.kubernetes.io/name: opc_interface
+images:
+- name: opc_interface
+  newTag: latest
+kind: Kustomization
+labels:
+- includeTemplates: true
+  pairs:
+    app.kubernetes.io/part-of: ziak
+    zyfra.com/product: ziak
+    zyfra.com/type: backend
+- includeSelectors: true
+  includeTemplates: true
+  pairs:
+    app.kubernetes.io/name: opc_interface
+resources:
+- deployment.yaml
+- svc.yaml

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: opc_interface
+    app.kubernetes.io/part-of: ziak
+  name: opc_interface
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: opc_interface
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: opc_interface
+        app.kubernetes.io/part-of: ziak
+    spec:
+      containers:
+      - image: opc_interface:latest
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health/liveness
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: opc_interface
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health/readiness
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 3

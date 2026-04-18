@@ -1,0 +1,27 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+configMapGenerator:
+- envs:
+  - object_model.env
+  name: object_model
+  options:
+    labels:
+      app.kubernetes.io/name: object_model
+images:
+- name: object_model
+  newTag: latest
+kind: Kustomization
+labels:
+- includeTemplates: true
+  pairs:
+    app.kubernetes.io/part-of: ziak
+    zyfra.com/product: ziak
+    zyfra.com/type: backend
+- includeSelectors: true
+  includeTemplates: true
+  pairs:
+    app.kubernetes.io/name: object_model
+resources:
+- deployment.yaml
+- svc.yaml
+- postgres-statefulset.yaml
+- postgres-service.yaml
